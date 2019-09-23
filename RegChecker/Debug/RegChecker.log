@@ -1,0 +1,4 @@
+﻿  RegChecker.c
+C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\RegChecker\RegChecker.c(141,85): warning C4090:  'function': different 'const' qualifiers
+C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\RegChecker\RegChecker.c(94,8): warning C4101:  'bName': unreferenced local variable
+  RegChecker.vcxproj -> C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\Debug\RegChecker.exe
