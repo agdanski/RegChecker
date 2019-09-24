@@ -2,9 +2,10 @@
 //
 
 #include "RegChecker.h"
+#include <ctype.h> //move to RegChecker.h
 
 static int StrIndex(char* str, char ch);
-static char* SubString(char* str, int start, int end, int* endIndex)
+static char* SubString(char* str, char startChar, char endChar, int* endIndex);
 
 const TCHAR * regPaths[] = {
 	REGPATH1, REGPATH2, REGPATH3, REGPATH4
@@ -361,18 +362,59 @@ reg_file_t * ParseRegistryFiles(LPCSTR filePath)
 			}
 			else
 			{
-				//assume its data
-				if (!extendedLine)
-				{
-					int nameEnd = 0;
-					char* name = SubString(line, '\"', '\"', &nameEnd); //key 
-					char* type = (char*)malloc(sizeof(char) * 7); //REG_SZ by default
-					strcpy_s(type, sizeof(char) * 7, "REG_SZ");
+                int nameEnd = 0;
+                char* name = SubString(line, '\"', '\"', &nameEnd); //key 
+                char* type = (char*)malloc(sizeof(char) * 7); //REG_SZ by default
+                strcpy_s(type, sizeof(char) * 7, "REG_SZ");
+                char* restOfStr = (name + nameEnd + 2); //next char should be an equals
+				int valueLen = 0;
+                if (restOfStr[0] == '\"')
+                {
+                    //REG_SZ or REG_EXPAND_SZ
+                    char* oldPtr = restOfStr;
+                    restOfStr = SubString(restOfStr, '\"', '\"', NULL);
+                    free(oldPtr);
+					valueLen = strlen(restOfStr);
 
-				}
+                }
+                else
+                {
+                    int typeEnd = 0;
+                    free(type);
+                    type = SubString(restOfStr, restOfStr[0], ':', &typeEnd);
+                    char* valString = (restOfStr + typeEnd + 2); //should now be exactly on the value
+                    char* currLine = valString;
+                    size_t currValStringSize = sizeof(char) * strlen(valString);
+                        
+                    while (currLine[strlen(currLine) - 1] == '\\')
+                    {
+                            //extended lines
+                        currLine[strlen(currLine) - 1] = '\0'; //remove trailing backslash
+                        if (currValStringSize != sizeof(char) * strlen(valString)) //check if we arent on first iteration
+                        {
+                            char* nextLine = getLine(regFile);
+							int index = 0;
+							while (isspace(index) && index < strlen(nextLine)) //should never hit second condition
+							{
+								index++;
+							}
+
+							char* toUse = (nextLine + index);
+							
+
+                            currLine = (char*)realloc(currLine, currValStringSize + (sizeof(char) * strlen(toUse)));
+                            char* end = (currLine + strlen(currLine));
+                            strcpy_s(end, sizeof(char) * (strlen(toUse) + 1), toUse);
+                            free(nextLine);
+                        }
+
+						//account for strings that are hex bytes, change this type of value to a byte array
+                    }
+
+
+                }
 				
 
-				
 			}
 		}
 
