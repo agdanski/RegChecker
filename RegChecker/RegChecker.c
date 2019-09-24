@@ -2,6 +2,7 @@
 //
 
 #include <stdio.h> 
+#include <stdbool.h>
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -183,5 +184,185 @@ LPCSTR getLine(FILE* stream) {
 
 	str[index] = '\0';
 	return str;
+}
+
+struct reg_entry
+{
+	char* name;
+	char* type;
+	char* value;
+	int valueLen;
+	struct reg_entry* next;
+};
+
+typedef struct reg_entry reg_entry_t;
+
+struct reg_list
+{
+	char* path;
+	reg_entry_t* first;
+	int size;
+	struct reg_list* next;
+};
+
+typedef struct reg_list reg_list_t;
+
+struct reg_file
+{
+	reg_list_t* list;
+	int size;
+};
+
+typedef struct reg_file reg_file_t;
+
+reg_file_t* CreateRegFileStruct()
+{
+	reg_file_t* regFile = (reg_file_t*)malloc(sizeof(reg_file_t));
+	memset(regFile, 0x0, sizeof(reg_file_t));
+	regFile->list = NULL;
+	regFile->size = 0;
+	return regFile;
+}
+
+void FreeRegFile(reg_file_t* regFile)
+{
+	for (int i = 0; i < regFile->size; i++)
+	{
+		FreeRegList(GetRegListFromFile(regFile, i));
+	}
+
+	free(regFile);
+}
+
+void AddRegPathToFile(reg_file_t* regFile, reg_list_t* regList)
+{
+	if (regFile->list == NULL)
+	{
+		regFile->list = regList;
+	}
+	else
+	{
+		reg_list_t* ptr = regFile->list;
+
+		while (true)
+		{
+			if (ptr->next != NULL)
+			{
+				ptr = ptr->next;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		ptr->next = regList;
+	}
+	regFile->size += 1;
+}
+
+void AddToRegList(
+	reg_list_t* regList, 
+	char* name, 
+	char* type, 
+	char* value, 
+	char* valueLen
+)
+{
+	reg_entry_t* regEntry = (reg_entry_t*)malloc(sizeof(reg_entry_t));
+	memset(regEntry, 0x0, sizeof(reg_entry_t));
+	regEntry->next = NULL;
+	regEntry->name = name;
+	regEntry->type = type;
+	regEntry->value = value;
+	regEntry->valueLen = valueLen;
+	if (regList->first == NULL)
+	{
+		regList->first = regEntry;
+	}
+	else
+	{
+		reg_entry_t* ptr = regList->first;
+		while (true)
+		{
+			if (ptr->next != NULL)
+			{
+				ptr = ptr->next;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		ptr->next = regEntry;
+	}
+
+
+	regList->size += 1;
+}
+
+reg_entry_t* GetEntryFromRegList(reg_list_t* regList, int index)
+{
+	if (index >= regList->size)
+	{
+		return NULL;
+	}
+	reg_entry_t* ptr = regList->first;
+	int curr = 0;
+	while (curr != index)
+	{
+		ptr = ptr->next;
+	}
+
+	return ptr;
+}
+
+reg_list_t* CreateRegList(char * path)
+{
+	reg_list_t* regList = (reg_list_t*)malloc(sizeof(reg_list_t));
+	memset(regList, 0x0, sizeof(reg_list_t));
+	regList->size = 0;
+	regList->first = NULL;
+	regList->path = (char*)malloc(sizeof(char) * strlen(path));
+	regList->next = NULL;
+	strcpy_s(regList->path, strlen(path) * sizeof(char), path);
+	return regList;
+}
+
+void FreeRegList(reg_list_t* regList)
+{
+	for (int i = 0; i < regList->size; i++)
+	{
+		reg_entry_t* regEntry = GetEntryFromRegList(regList, i);
+		free(regEntry);
+	}
+
+	free(regList->path);
+	free(regList);
+}
+
+
+//parse .reg files (going to likely be in whichever program i put the files in, but this is the general idea.
+//highly likely going to have to rewrite this in java unless I somehow send the files over or something
+reg_list_t * ParseRegistryFiles(LPCSTR filePath) 
+{
+	//need to get registry path
+	
+	reg_list_t* regList = CreateRegList();
+	FILE* regFile = fopen(filePath, "r");
+	char* currentPath = NULL;
+	while (true)
+	{
+		if (feof(regFile))
+		{
+			break;
+		}
+
+
+	}
+
+	fclose(regFile);
+	return regList;
 }
 
