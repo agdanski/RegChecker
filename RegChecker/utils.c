@@ -63,3 +63,30 @@ LPCSTR getLine(FILE* stream) {
 	str[index] = '\0';
 	return str;
 }
+
+int getAmountOfCharsNot(char* str, char ch)
+{
+	int amt = 0;
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (str[i] != ch)
+		{
+			amt++;
+		}
+	}
+
+	return amt;
+}
+
+short strtos(char* string)
+{
+	long int l = strtol(string, NULL, 16);
+	if (l < 0x80 && l > 0x0)
+	{
+		return (short)l;
+	}
+	else
+	{
+		return -1;
+	}
+}

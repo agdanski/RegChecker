@@ -18,7 +18,7 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 			break;
 		}
 
-		char* line = getLine(regFile);
+		LPCSTR line = getLine(regFile);
 
 		if (line[0] == '[' && line[strlen(line) - 1] == ']')
 		{
@@ -88,6 +88,30 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 
 						//account for strings that are hex bytes, change this type of value to a byte array
 					}
+
+					if (strncmp(type, "hex", 3) == 0) //account for hex strings
+					{
+						char* first = strtok(valString, ",");
+						int size = getAmountOfCharsNot(valString, ',') / 2;
+						char* bytes = (char*)malloc(sizeof(char) * size);
+						int index = 0;
+						while (true)
+						{
+							bytes[index] = strtos(first);
+							first = strtok(valString, NULL);
+							index++;
+							if (first == NULL)
+							{
+								break;
+							}
+						}
+						free(valString);
+						valString = bytes;
+						currValStringSize = size;
+						
+					}
+
+					AddToRegList(currentList, name, type, valString, currValStringSize);
 
 
 				}
