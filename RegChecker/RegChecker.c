@@ -1,24 +1,10 @@
 // RegChecker.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <stdio.h> 
-#include <stdbool.h>
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <Windows.h>
-#include <tchar.h>
-#include <malloc.h>
-#define MAX_VALUE_NAME 16383
-#define MAX_KEY_LENGTH 255
+#include "RegChecker.h"
 
-#define REGPATH1 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run")
-#define REGPATH2 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce")
-#define REGPATH3 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunServices")
-#define REGPATH4 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce")
-#define REGPATH5 TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit")
-
-void printKeyValues(HKEY hKey);
+static int StrIndex(char* str, char ch);
+static char* SubString(char* str, int start, int end, int* endIndex)
 
 const TCHAR * regPaths[] = {
 	REGPATH1, REGPATH2, REGPATH3, REGPATH4
@@ -186,34 +172,7 @@ LPCSTR getLine(FILE* stream) {
 	return str;
 }
 
-struct reg_entry
-{
-	char* name;
-	char* type;
-	char* value;
-	int valueLen;
-	struct reg_entry* next;
-};
 
-typedef struct reg_entry reg_entry_t;
-
-struct reg_list
-{
-	char* path;
-	reg_entry_t* first;
-	int size;
-	struct reg_list* next;
-};
-
-typedef struct reg_list reg_list_t;
-
-struct reg_file
-{
-	reg_list_t* list;
-	int size;
-};
-
-typedef struct reg_file reg_file_t;
 
 reg_file_t* CreateRegFileStruct()
 {
@@ -232,6 +191,24 @@ void FreeRegFile(reg_file_t* regFile)
 	}
 
 	free(regFile);
+}
+
+reg_list_t* GetRegListFromFile(reg_file_t* regFile, int index)
+{
+	if (index >= regFile->size)
+	{
+		return NULL;
+	}
+
+	reg_list_t* ptr = regFile->list;
+	int curr = 0;
+	while (curr != index)
+	{
+		ptr = ptr->next;
+		curr++;
+	}
+
+	return ptr;
 }
 
 void AddRegPathToFile(reg_file_t* regFile, reg_list_t* regList)
@@ -313,6 +290,7 @@ reg_entry_t* GetEntryFromRegList(reg_list_t* regList, int index)
 	while (curr != index)
 	{
 		ptr = ptr->next;
+		curr++;
 	}
 
 	return ptr;
@@ -345,13 +323,15 @@ void FreeRegList(reg_list_t* regList)
 
 //parse .reg files (going to likely be in whichever program i put the files in, but this is the general idea.
 //highly likely going to have to rewrite this in java unless I somehow send the files over or something
-reg_list_t * ParseRegistryFiles(LPCSTR filePath) 
+reg_file_t * ParseRegistryFiles(LPCSTR filePath) 
 {
 	//need to get registry path
 	
-	reg_list_t* regList = CreateRegList();
+	reg_file_t* regFileT = CreateRegFileStruct();
 	FILE* regFile = fopen(filePath, "r");
 	char* currentPath = NULL;
+	reg_list_t* currentList = NULL;
+	bool extendedLine = false;
 	while (true)
 	{
 		if (feof(regFile))
@@ -359,10 +339,97 @@ reg_list_t * ParseRegistryFiles(LPCSTR filePath)
 			break;
 		}
 
+		char* line = getLine(regFile);
 
+		if (line[0] == '[' && line[strlen(line) - 1] == ']')
+		{
+			char* path = (char*)malloc(sizeof(char) * (strlen(line) - 1));
+			strcpy_s(path, sizeof(char) * (strlen(line) - 2), (line + 1));
+			path[strlen(line) - 2] = '\0'; //ensure null terminator
+			currentPath = path;
+			if (currentList != NULL)
+			{
+				AddRegPathToFile(regFileT, currentList);
+			}
+			currentList = CreateRegList(path);
+		}
+		else
+		{
+			if (currentPath == NULL)
+			{
+				goto cleanup;
+			}
+			else
+			{
+				//assume its data
+				if (!extendedLine)
+				{
+					int nameEnd = 0;
+					char* name = SubString(line, '\"', '\"', &nameEnd); //key 
+					char* type = (char*)malloc(sizeof(char) * 7); //REG_SZ by default
+					strcpy_s(type, sizeof(char) * 7, "REG_SZ");
+
+				}
+				
+
+				
+			}
+		}
+
+
+cleanup:
+		free(line);
 	}
 
-	fclose(regFile);
-	return regList;
+	fclose(regFileT);
+	return regFileT;
+}
+
+static int StrIndex(char* str, char ch)
+{
+	char* ptr = strstr(str, &ch);
+	if (ptr == NULL)
+	{
+		return -1;
+	}
+	else
+	{
+		return (ptr - str);
+	}
+}
+
+static char* SubString(char* str, char startChar, char endChar, int* endIndex)
+{
+	int start = -1;
+	int end = -1;
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (start == -1 && str[i] == startChar)
+		{
+			start = i;
+		}
+		else
+		{
+			if (end == -1 && str[i] == endChar)
+			{
+				end = i;
+			}
+		}
+	}
+
+	if (start == -1 || end == -1)
+	{
+		return NULL;
+	}
+
+	char* ret = (char*)malloc(sizeof(char) * ((end - start) + 1));
+	ret[end - start] = '\0';
+	strcpy_s(ret, end - start, (str + start));
+	if (endIndex != NULL)
+	{
+		int index = start + (end - start);
+		*endIndex = index;
+	}
+	return ret;
 }
 
