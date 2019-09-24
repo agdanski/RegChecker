@@ -152,9 +152,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="RegChecker.c" />
+    <ClCompile Include="reglist.c" />
+    <ClCompile Include="regparse.c" />
+    <ClCompile Include="utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RegChecker.h" />
+    <ClInclude Include="reglist.h" />
+    <ClInclude Include="regparse.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
