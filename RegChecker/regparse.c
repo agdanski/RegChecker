@@ -2,7 +2,7 @@
 
 //parse .reg files (going to likely be in whichever program i put the files in, but this is the general idea.
 //highly likely going to have to rewrite this in java unless I somehow send the files over or something
-reg_file_t* ParseRegistryFiles(LPCSTR filePath)
+reg_file_t* ParseRegistryFile(LPCSTR filePath)
 {
 	//need to get registry path
 

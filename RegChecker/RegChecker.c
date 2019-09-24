@@ -2,7 +2,6 @@
 //
 
 #include "RegChecker.h"
-#include <ctype.h> //move to RegChecker.h
 
 static int StrIndex(char* str, char ch);
 static char* SubString(char* str, char startChar, char endChar, int* endIndex);

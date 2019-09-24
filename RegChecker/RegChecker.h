@@ -1,6 +1,8 @@
 #pragma once
 #include <stdio.h> 
 #include <stdbool.h>
+#include <ctype.h> //move to RegChecker.h
+
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
