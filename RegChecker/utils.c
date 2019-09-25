@@ -90,16 +90,53 @@ char * getLine(FILE* stream) {
 		}
 	}
 	str[index] = '\0';
-
-	printf("ATTEMPTING TO PRINT STR\n");
-
-	for (int i = 0; i < index; i++)
-	{
-		printf("%c", str[index]);
-	}
-	printf("\n");
-	printf("DONE PRINTING STR\n");
 	return str;
+}
+
+char* getLineWchar(FILE* stream) {
+	wint_t c = -1;
+	int index = 0;
+	wchar_t* str = (wchar_t*)malloc(sizeof(wchar_t));
+	if (str == 0)
+	{
+		printf("NULL PTR - GETLINE\n");
+		return NULL;
+	}
+
+	/*while ((c = fgetc(stream)) != EOF && c != 10) {
+		printf("HIIIII\n");
+		str[index] = (char)c;
+		str = (char*)realloc(str, sizeof(char) * (index + 2));
+		index++;
+	}*/
+
+	//str[index] = '\0';
+	//printf("returning %d\n", strlen(str));
+
+	while (!feof(stream))
+	{
+		wchar_t* line = NULL;
+		c = fgetwc(stream);
+		if (c == EOF || c == L'\n' || L'\0')
+		{
+			break;
+		}
+		str[index] = (wchar_t)c;
+		index++;
+		str = (wchar_t*)realloc(str, sizeof(wchar_t) * (index + 1));
+		if (str == 0)
+		{
+			printf("STR NULL\n");
+			return NULL;
+		}
+	}
+	str[index] = L'\0';
+	//now to convert to char * instead of wchar *
+	wprintf(L"WCHAR LINE %ls\n", str);
+	char* asciiStr = (char*)malloc(sizeof(char) * (wcslen(str) + 1));
+	size_t result = wcstombs(asciiStr, str, wcslen(str) + 1);
+	printf("ASCII LINE %s\n", asciiStr);
+	return asciiStr;
 }
 
 int getAmountOfCharsNot(char* str, char ch)

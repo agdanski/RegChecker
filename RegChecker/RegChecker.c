@@ -172,7 +172,7 @@ int main()
 	FILE* file = fopen("testregexport.reg", "rb");
 	while (!feof(file))
 	{
-		printf("%s\n", getLine(file));
+		printf("%s\n", getLineWchar(file));
 	}
 
 	fclose(file);
