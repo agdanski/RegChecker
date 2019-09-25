@@ -61,7 +61,7 @@ void AddRegPathToFile(reg_file_t* regFile, reg_list_t* regList)
 
 		ptr->next = regList;
 	}
-	regFile->size += 1;
+	regFile->size = regFile->size + 1;
 }
 
 void AddToRegList(
@@ -102,7 +102,7 @@ void AddToRegList(
 	}
 
 
-	regList->size += 1;
+	regList->size = regList->size + 1;
 }
 
 reg_entry_t* GetEntryFromRegList(reg_list_t* regList, int index)
@@ -144,4 +144,27 @@ void FreeRegList(reg_list_t* regList)
 
 	free(regList->path);
 	free(regList);
+}
+
+void PrintRegFile(reg_file_t* regFile)
+{
+	printf("REGFILE PRINT - %d\n", regFile->size);
+	for (int i = 0; i < regFile->size; i++)
+	{
+		reg_list_t* regList = GetRegListFromFile(regFile, i);
+		printf("[%s]\n\n", regList->path);
+		
+		for (int x = 0; x < regList->size; x++)
+		{
+			reg_entry_t* entry = GetEntryFromRegList(regList, x);
+			printf("Type: %s\n, Name: %s, ValueLen: %d\n", entry->type, entry->name, entry->valueLen);
+			for (int y = 0; y < entry->valueLen; y++)
+			{
+				printf("%c, ", entry->value[y]);
+			}
+
+			printf("\n");
+		}
+
+	}
 }

@@ -1,4 +1,4 @@
-﻿  RegChecker.c
-C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\RegChecker\RegChecker.c(141,85): warning C4090:  'function': different 'const' qualifiers
-C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\RegChecker\RegChecker.c(94,8): warning C4101:  'bName': unreferenced local variable
-  RegChecker.vcxproj -> C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\Debug\RegChecker.exe
+﻿  utils.c
+C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(22,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(108,20): warning C4018:  '<': signed/unsigned mismatch
+  RegChecker.vcxproj -> C:\Users\Saint\Desktop\RegChecker\Debug\RegChecker.exe

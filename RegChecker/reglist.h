@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include <stdbool.h>
 #include <Windows.h>
 #include <malloc.h>
@@ -46,3 +47,5 @@ reg_entry_t* GetEntryFromRegList(reg_list_t* regList, int index);
 
 reg_list_t* CreateRegList(char* path);
 void FreeRegList(reg_list_t* regList);
+
+void PrintRegFile(reg_file_t* regFile);

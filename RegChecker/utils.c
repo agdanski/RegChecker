@@ -1,5 +1,7 @@
 #include "utils.h"
 
+static int hexadecimalToDecimal(char* hexVal);
+
 int StrIndex(char* str, char ch)
 {
 	char* ptr = strstr(str, &ch);
@@ -49,18 +51,54 @@ char* SubString(char* str, char startChar, char endChar, int* endIndex)
 }
 
 
-LPCSTR getLine(FILE* stream) {
+//seems to be an issue with this function here.
+char * getLine(FILE* stream) {
 	int c = -1;
 	int index = 0;
 	char* str = (char*)malloc(sizeof(char));
+	if (str == 0)
+	{
+		printf("NULL PTR - GETLINE\n");
+		return NULL;
+	}
 
-	while ((c = fgetc(stream)) != EOF && c != 10) {
+	/*while ((c = fgetc(stream)) != EOF && c != 10) {
+		printf("HIIIII\n");
 		str[index] = (char)c;
 		str = (char*)realloc(str, sizeof(char) * (index + 2));
 		index++;
-	}
+	}*/
 
+	//str[index] = '\0';
+	//printf("returning %d\n", strlen(str));
+
+	while (!feof(stream))
+	{
+		char* line = NULL;
+		c = fgetc(stream);
+		if (c == EOF || c == '\n' || '\0')
+		{
+			break;
+		}
+		str[index] = (char)c;
+		index++;
+		str = (char*)realloc(str, sizeof(char) * (index + 1));
+		if (str == 0)
+		{
+			printf("STR NULL\n");
+			return NULL;
+		}
+	}
 	str[index] = '\0';
+
+	printf("ATTEMPTING TO PRINT STR\n");
+
+	for (int i = 0; i < index; i++)
+	{
+		printf("%c", str[index]);
+	}
+	printf("\n");
+	printf("DONE PRINTING STR\n");
 	return str;
 }
 
@@ -80,13 +118,52 @@ int getAmountOfCharsNot(char* str, char ch)
 
 short strtos(char* string)
 {
-	long int l = strtol(string, NULL, 16);
-	if (l < 0x80 && l > 0x0)
+	int val = hexadecimalToDecimal(string);
+	if (val < 128 && val >= -128)
 	{
-		return (short)l;
+		return (short)val;
 	}
 	else
 	{
 		return -1;
 	}
+}
+
+//geeksforgeeks lmao
+static int hexadecimalToDecimal(char * hexVal)
+{
+	int len = strlen(hexVal);
+
+	// Initializing base value to 1, i.e 16^0 
+	int base = 1;
+
+	int dec_val = 0;
+
+	// Extracting characters as digits from last character 
+	for (int i = len - 1; i >= 0; i--)
+	{
+		// if character lies in '0'-'9', converting  
+		// it to integral 0-9 by subtracting 48 from 
+		// ASCII value. 
+		if (hexVal[i] >= '0' && hexVal[i] <= '9')
+		{
+			dec_val += (hexVal[i] - 48) * base;
+
+			// incrementing base by power 
+			base = base * 16;
+		}
+
+		// if character lies in 'A'-'F' , converting  
+		// it to integral 10 - 15 by subtracting 55  
+		// from ASCII value 
+		else if (hexVal[i] >= 'A' && hexVal[i] <= 'F')
+		{
+			dec_val += (hexVal[i] - 55) * base;
+
+			// incrementing base by power 
+			base = base * 16;
+		}
+	}
+
+	return dec_val;
 }

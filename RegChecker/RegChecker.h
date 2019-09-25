@@ -18,3 +18,7 @@
 #define REGPATH4 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce")
 #define REGPATH5 TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit")
 
+#include <stdio.h>
+#include "regparse.h"
+#include "reglist.h"
+#include <stdlib.h>

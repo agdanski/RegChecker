@@ -5,13 +5,14 @@
 
 static int StrIndex(char* str, char ch);
 static char* SubString(char* str, char startChar, char endChar, int* endIndex);
+void printKeyValues(HKEY key);
 
 const TCHAR * regPaths[] = {
 	REGPATH1, REGPATH2, REGPATH3, REGPATH4
 };
 
 //error more data available
-int main(){
+int main2(){
 	HKEY key;
 	printf("Reading from HKEY_CURRENT_USER\n");
 	for (int i = 0; i < 4; i++) {
@@ -156,6 +157,39 @@ void printKeyValues(HKEY hKey) //eventually try and cut some stack space off thi
 [HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows]
 */
 
+int main()
+{
+	//load in a copy of the entire windows registry
+	/*printf("Hello\n");
+	printf("testing getline - ");
+	char* line = getLine(stdin);
+	fflush(stdout);
+	printf("line was %s\n", line);
+
+	return 0;*/
+	//getline is clearly working with stdin, why isnt it working with this specific file...
+	//further testing - seems to only be .reg files that are messing up getline
+	FILE* file = fopen("testregexport.reg", "rb");
+	while (!feof(file))
+	{
+		printf("%s\n", getLine(file));
+	}
+
+	fclose(file);
+	return 0;
+	reg_file_t* regFile = ParseRegistryFile("testregexport.reg");
+	if (regFile == NULL)
+	{
+		printf("regfile is null\n");
+		return -1;
+	}
+	else
+	{
+		PrintRegFile(regFile);
+	}
+
+	return 0;
+}
 
 
 

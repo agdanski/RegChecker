@@ -5,23 +5,39 @@
 reg_file_t* ParseRegistryFile(LPCSTR filePath)
 {
 	//need to get registry path
-
+	system("echo %cd%");
+	printf("parse\n");
 	reg_file_t* regFileT = CreateRegFileStruct();
+	printf("1\n");
 	FILE* regFile = fopen(filePath, "r");
+	fseek(regFile, 0L, SEEK_SET); //doubt this will fix file issue but why not
+	if (regFile == NULL)
+	{
+		printf("RegFile is null\n");
+		return NULL;
+	}
+	printf("2\n");
 	char* currentPath = NULL;
 	reg_list_t* currentList = NULL;
 	bool extendedLine = false;
+	printf("3\n");
 	while (true)
 	{
+		printf("4\n");
 		if (feof(regFile))
 		{
+			printf("5\n");
 			break;
 		}
 
-		LPCSTR line = getLine(regFile);
+		printf("6\n");
 
+		LPCSTR line = getLine(regFile);
+		printf("7\n");
+		printf("line - %s\n", line);
 		if (line[0] == '[' && line[strlen(line) - 1] == ']')
 		{
+			printf("8\n");
 			char* path = (char*)malloc(sizeof(char) * (strlen(line) - 1));
 			strcpy_s(path, sizeof(char) * (strlen(line) - 2), (line + 1));
 			path[strlen(line) - 2] = '\0'; //ensure null terminator
@@ -31,9 +47,11 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 				AddRegPathToFile(regFileT, currentList);
 			}
 			currentList = CreateRegList(path);
+			printf("9\n");
 		}
 		else
 		{
+			printf("10\n");
 			if (currentPath == NULL)
 			{
 				goto cleanup;
@@ -116,7 +134,7 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 
 				}
 
-
+				printf("11\n");
 			}
 		}
 
@@ -125,6 +143,7 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 		free(line);
 	}
 
-	fclose(regFileT);
+	fclose(regFile);
+	printf("DONE PARSE\n");
 	return regFileT;
 }
