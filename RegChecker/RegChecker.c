@@ -169,13 +169,19 @@ int main()
 	return 0;*/
 	//getline is clearly working with stdin, why isnt it working with this specific file...
 	//further testing - seems to only be .reg files that are messing up getline
-	FILE* file = fopen("testregexport.reg", "rb");
+	//im dumb - BOM is only on the first line lmao
+	FILE* file = fopen("testregexport.reg", "rb"); //There is a byte order mark in utf-16 - remove it
+	fseek(file, sizeof(wchar_t), SEEK_SET); //strip BOM
+	//always gonna be utf16le for reg files
+	FILE* output = fopen("output.txt", "w");
 	while (!feof(file))
 	{
-		printf("%s\n", getLineWchar(file));
+		char* line = getLineWchar(file);
+		fprintf(output, "%s\n", line);
 	}
 
 	fclose(file);
+	fclose(output);
 	return 0;
 	reg_file_t* regFile = ParseRegistryFile("testregexport.reg");
 	if (regFile == NULL)

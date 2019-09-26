@@ -41,7 +41,7 @@ void AddToRegList(
 	char* name,
 	char* type,
 	char* value,
-	char* valueLen
+	int valueLen
 );
 reg_entry_t* GetEntryFromRegList(reg_list_t* regList, int index);
 

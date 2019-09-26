@@ -82,7 +82,9 @@ char * getLine(FILE* stream) {
 		}
 		str[index] = (char)c;
 		index++;
-		str = (char*)realloc(str, sizeof(char) * (index + 1));
+		size_t size = (size_t)index;
+		size++;
+		str = (char*)realloc(str, sizeof(char) * (size));
 		if (str == 0)
 		{
 			printf("STR NULL\n");
@@ -93,7 +95,9 @@ char * getLine(FILE* stream) {
 	return str;
 }
 
-char* getLineWchar(FILE* stream) {
+char* getLineWchar(FILE* stream) 
+{
+	setlocale(LC_ALL, "en_US.UTF-16");
 	wint_t c = -1;
 	int index = 0;
 	wchar_t* str = (wchar_t*)malloc(sizeof(wchar_t));
@@ -103,24 +107,15 @@ char* getLineWchar(FILE* stream) {
 		return NULL;
 	}
 
-	/*while ((c = fgetc(stream)) != EOF && c != 10) {
-		printf("HIIIII\n");
-		str[index] = (char)c;
-		str = (char*)realloc(str, sizeof(char) * (index + 2));
-		index++;
-	}*/
-
-	//str[index] = '\0';
-	//printf("returning %d\n", strlen(str));
-
 	while (!feof(stream))
 	{
 		wchar_t* line = NULL;
 		c = fgetwc(stream);
-		if (c == EOF || c == L'\n' || L'\0')
+		if (c == WEOF || c == 0x2028) // newline is different w this file, use CRLF
 		{
 			break;
 		}
+
 		str[index] = (wchar_t)c;
 		index++;
 		str = (wchar_t*)realloc(str, sizeof(wchar_t) * (index + 1));
@@ -132,10 +127,12 @@ char* getLineWchar(FILE* stream) {
 	}
 	str[index] = L'\0';
 	//now to convert to char * instead of wchar *
-	wprintf(L"WCHAR LINE %ls\n", str);
 	char* asciiStr = (char*)malloc(sizeof(char) * (wcslen(str) + 1));
-	size_t result = wcstombs(asciiStr, str, wcslen(str) + 1);
-	printf("ASCII LINE %s\n", asciiStr);
+	size_t size = (size_t)wcslen(str);
+	size++;
+	size = size * sizeof(wchar_t);
+	size_t result = wcstombs(asciiStr, str, size);
+	setlocale(LC_ALL, "en_US");
 	return asciiStr;
 }
 

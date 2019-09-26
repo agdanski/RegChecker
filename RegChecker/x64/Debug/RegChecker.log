@@ -1,6 +1,4 @@
-﻿  RegChecker.c
-C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\RegChecker\RegChecker.c(140,85): warning C4090:  'function': different 'const' qualifiers
-  test.c
-  Generating Code...
-C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\RegChecker\RegChecker.c(93,8): warning C4101:  'bName': unreferenced local variable
-  RegChecker.vcxproj -> C:\Users\Aaron Gdanski\Desktop\RTBTStuff\RTBTStuff-master\RegChecker\x64\Debug\RegChecker.exe
+﻿  utils.c
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(14,21): warning C4244:  'return': conversion from '__int64' to 'int', possible loss of data
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(169,1): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+  RegChecker.vcxproj -> C:\Users\Aaron Gdanski\Desktop\RegChecker\x64\Debug\RegChecker.exe

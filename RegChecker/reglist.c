@@ -69,10 +69,15 @@ void AddToRegList(
 	char* name,
 	char* type,
 	char* value,
-	char* valueLen
+	int valueLen
 )
 {
 	reg_entry_t* regEntry = (reg_entry_t*)malloc(sizeof(reg_entry_t));
+	if (regEntry == 0)
+	{
+		printf("error\n");
+		return;
+	}
 	memset(regEntry, 0x0, sizeof(reg_entry_t));
 	regEntry->next = NULL;
 	regEntry->name = name;
