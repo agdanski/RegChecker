@@ -1,4 +1,2 @@
-﻿  utils.c
-C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(22,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(157,20): warning C4018:  '<': signed/unsigned mismatch
+﻿  reglist.c
   RegChecker.vcxproj -> C:\Users\Saint\Desktop\RegChecker\Debug\RegChecker.exe

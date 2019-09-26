@@ -133,9 +133,9 @@ reg_list_t* CreateRegList(char* path)
 	memset(regList, 0x0, sizeof(reg_list_t));
 	regList->size = 0;
 	regList->first = NULL;
-	regList->path = (char*)malloc(sizeof(char) * strlen(path));
+	regList->path = (char*)malloc(sizeof(char) * (strlen(path) + (size_t) 1));
 	regList->next = NULL;
-	strcpy_s(regList->path, strlen(path) * sizeof(char), path);
+	strcpy_s(regList->path, (strlen(path) + (size_t) 1) * sizeof(char), path);
 	return regList;
 }
 

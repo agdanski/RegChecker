@@ -41,7 +41,7 @@ char* SubString(char* str, char startChar, char endChar, int* endIndex)
 
 	char* ret = (char*)malloc(sizeof(char) * ((end - start) + 1)); //fix this
 	ret[end - start] = '\0';
-	strcpy_s(ret, sizeof(char) * (end - start), (str + start));
+	strcpy_s(ret, sizeof(char) * (end - start), (str + start)); //buffer too small
 	if (endIndex != NULL)
 	{
 		int index = start + (end - start);

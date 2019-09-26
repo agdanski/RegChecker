@@ -33,14 +33,18 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 
 		printf("6\n");
 
-		LPCSTR line = getLine(regFile);
+		LPCSTR line = getLineWchar(regFile);
 		printf("7\n");
 		printf("line - %s\n", line);
 		if (line[0] == '[' && line[strlen(line) - 1] == ']')
 		{
 			printf("8\n");
-			char* path = (char*)malloc(sizeof(char) * (strlen(line) - 1));
-			strcpy_s(path, sizeof(char) * (strlen(line) - 2), (line + 1));
+			char* path = (char*)malloc(sizeof(char) * (strlen(line) - (size_t) 1));
+			size_t amtToCpy = sizeof(char) * ((size_t)strlen(line) - (size_t) 2);
+			printf("test- %ld, %d\n", amtToCpy, strlen((line + 1)));
+			//strncpy_s(path, amtToCpy, (line + 1));
+			strncpy_s(path, strlen(line) - (size_t) 1, line + 1, amtToCpy);
+			printf("path %s\n", path);
 			path[strlen(line) - 2] = '\0'; //ensure null terminator
 			currentPath = path;
 			if (currentList != NULL)
@@ -89,7 +93,7 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 						currLine[strlen(currLine) - 1] = '\0'; //remove trailing backslash
 						if (currValStringSize != sizeof(char) * strlen(valString)) //check if we arent on first iteration
 						{
-							char* nextLine = getLine(regFile);
+							char* nextLine = getLineWchar(regFile);
 							int index = 0;
 							while (isspace(index) && index < strlen(nextLine)) //should never hit second condition
 							{
