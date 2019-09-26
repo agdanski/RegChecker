@@ -1,27 +1,21 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run]
-"CORSAIR iCUE Software"="\"C:\\Program Files 
-x86)\\Corsair\\CORSAIR iCUE Software\\iCUE Launcher.exe\" --autorun"
-"SunJavaUpdateSched"="\"C:\\Program Files 
-x86)\\Common Files\\Java\\Java Update\\jusched.exe\""
-"EEventManager"="\"C:\\Program Files 
-x86)\\Epson Software\\Event Manager\\EEventManager.exe\""
-"FUFAXRCV"=hex
-2):22,00,43,00,3a,00,5c,00,50,00,72,00,6f,00,67,00,72,00,61,00,\
-  6d,00,20,00,46,00,69,00,6c,00,65,00,73,00,20,00,28,00,78,00,38,00,36,00,29,\
-  00,5c,00,45,00,70,00,73,00,6f,00,6e,00,20,00,53,00,6f,00,66,00,74,00,77,00,\
-  61,00,72,00,65,00,5c,00,46,00,41,00,58,00,20,00,55,00,74,00,69,00,6c,00,69,\
-  00,74,00,79,00,5c,00,46,00,55,00,46,00,41,00,58,00,52,00,43,00,56,00,2e,00,\
-  65,00,78,00,65,00,22,00,00,00
-"FUFAXSTM"=hex
-2):22,00,43,00,3a,00,5c,00,50,00,72,00,6f,00,67,00,72,00,61,00,\
-  6d,00,20,00,46,00,69,00,6c,00,65,00,73,00,20,00,28,00,78,00,38,00,36,00,29,\
-  00,5c,00,45,00,70,00,73,00,6f,00,6e,00,20,00,53,00,6f,00,66,00,74,00,77,00,\
-  61,00,72,00,65,00,5c,00,46,00,41,00,58,00,20,00,55,00,74,00,69,00,6c,00,69,\
-  00,74,00,79,00,5c,00,46,00,55,00,46,00,41,00,58,00,53,00,54,00,4d,00,2e,00,\
-  65,00,78,00,65,00,22,00,00,00
-"vmware-tray.exe"="\"C:\\Program Files 
-x86)\\VMware\\VMware Workstation\\vmware-tray.exe\""
-
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run]
+"CORSAIR iCUE Software"="\"C:\\Program Files (x86)\\Corsair\\CORSAIR iCUE Software\\iCUE Launcher.exe\" --autorun"
+"SunJavaUpdateSched"="\"C:\\Program Files (x86)\\Common Files\\Java\\Java Update\\jusched.exe\""
+"EEventManager"="\"C:\\Program Files (x86)\\Epson Software\\Event Manager\\EEventManager.exe\""
+"FUFAXRCV"=hex(2):22,00,43,00,3a,00,5c,00,50,00,72,00,6f,00,67,00,72,00,61,00,\
+  6d,00,20,00,46,00,69,00,6c,00,65,00,73,00,20,00,28,00,78,00,38,00,36,00,29,\
+  00,5c,00,45,00,70,00,73,00,6f,00,6e,00,20,00,53,00,6f,00,66,00,74,00,77,00,\
+  61,00,72,00,65,00,5c,00,46,00,41,00,58,00,20,00,55,00,74,00,69,00,6c,00,69,\
+  00,74,00,79,00,5c,00,46,00,55,00,46,00,41,00,58,00,52,00,43,00,56,00,2e,00,\
+  65,00,78,00,65,00,22,00,00,00
+"FUFAXSTM"=hex(2):22,00,43,00,3a,00,5c,00,50,00,72,00,6f,00,67,00,72,00,61,00,\
+  6d,00,20,00,46,00,69,00,6c,00,65,00,73,00,20,00,28,00,78,00,38,00,36,00,29,\
+  00,5c,00,45,00,70,00,73,00,6f,00,6e,00,20,00,53,00,6f,00,66,00,74,00,77,00,\
+  61,00,72,00,65,00,5c,00,46,00,41,00,58,00,20,00,55,00,74,00,69,00,6c,00,69,\
+  00,74,00,79,00,5c,00,46,00,55,00,46,00,41,00,58,00,53,00,54,00,4d,00,2e,00,\
+  65,00,78,00,65,00,22,00,00,00
+"vmware-tray.exe"="\"C:\\Program Files (x86)\\VMware\\VMware Workstation\\vmware-tray.exe\""
+
 

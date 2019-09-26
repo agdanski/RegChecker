@@ -13,3 +13,4 @@ char * getLine(FILE* stream);
 char* getLineWchar(FILE* stream);
 int getAmountOfCharsNot(char* str, char ch);
 short strtos(char* string);
+FILE* OpenWcharFile(LPCSTR filePath);

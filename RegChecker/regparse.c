@@ -9,8 +9,9 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 	printf("parse\n");
 	reg_file_t* regFileT = CreateRegFileStruct();
 	printf("1\n");
-	FILE* regFile = fopen(filePath, "r");
-	fseek(regFile, 0L, SEEK_SET); //doubt this will fix file issue but why not
+	//FILE* regFile = fopen(filePath, "r");
+	//fseek(regFile, 0L, SEEK_SET); //doubt this will fix file issue but why not
+	FILE * regFile = OpenWcharFile(filePath);
 	if (regFile == NULL)
 	{
 		printf("RegFile is null\n");

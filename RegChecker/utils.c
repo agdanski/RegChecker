@@ -111,11 +111,25 @@ char* getLineWchar(FILE* stream)
 	{
 		wchar_t* line = NULL;
 		c = fgetwc(stream);
-		if (c == WEOF || c == 0x2028) // newline is different w this file, use CRLF
+		if (c == WEOF) // newline is different w this file, use CRLF
 		{
 			break;
 		}
 
+		//newline fix
+		if (c == 0xD)
+		{
+			wint_t c1 = fgetwc(stream);
+			if (c1 == 0xA)
+			{
+				break;
+			}
+			else
+			{
+				//set the stream back by 1 (on windows a wchar is 2 bytes, probably shouldnt make this constant but whatever)
+				fseek(stream, -2L, SEEK_CUR);
+			}
+		}
 		str[index] = (wchar_t)c;
 		index++;
 		str = (wchar_t*)realloc(str, sizeof(wchar_t) * (index + 1));
@@ -126,7 +140,6 @@ char* getLineWchar(FILE* stream)
 		}
 	}
 	str[index] = L'\0';
-	//now to convert to char * instead of wchar *
 	char* asciiStr = (char*)malloc(sizeof(char) * (wcslen(str) + 1));
 	size_t size = (size_t)wcslen(str);
 	size++;
@@ -200,4 +213,11 @@ static int hexadecimalToDecimal(char * hexVal)
 	}
 
 	return dec_val;
+}
+
+FILE* OpenWcharFile(LPCSTR filePath)
+{
+	FILE* file = fopen(filePath, "rb"); //utf16 files have to be opened in rb
+	fseek(file, sizeof(wchar_t), SEEK_SET); //remove BOM - we know its gonna be little endian
+	return file;
 }
