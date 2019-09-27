@@ -1,23 +1,15 @@
 ﻿  regparse.c
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(53,32): warning C4090:  'function': different 'const' qualifiers
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(68,32): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(75,38): warning C4047:  'function': 'char' differs in levels of indirection from 'void *'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(75,38): warning C4024:  'SubString': different types for formal and actual parameter 2
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(96,15): warning C4477:  'printf' : format string '%d' requires an argument of type 'int', but variadic argument 2 has type 'size_t'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(96,15): message :  consider using '%zd' in the format string
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(96,15): warning C4477:  'printf' : format string '%d' requires an argument of type 'int', but variadic argument 3 has type 'size_t'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(96,15): message :  consider using '%zd' in the format string
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(116,36): warning C4244:  '=': conversion from 'short' to 'char', possible loss of data
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(130,72): warning C4267:  'function': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(141,12): warning C4090:  'function': different 'const' qualifiers
-  utils.c
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(56,1): warning C4090:  'initializing': different 'const' qualifiers
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(14,21): warning C4244:  'return': conversion from '__int64' to 'int', possible loss of data
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(39,39): warning C4047:  '!=': 'int' differs in levels of indirection from 'void *'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(39,75): warning C4047:  '==': 'int' differs in levels of indirection from 'void *'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(46,23): warning C4047:  '==': 'int' differs in levels of indirection from 'void *'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(48,22): warning C4047:  '!=': 'int' differs in levels of indirection from 'void *'
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(58,26): warning C4047:  '==': 'int' differs in levels of indirection from 'void *'
-  Generating Code...
-C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\utils.c(244,1): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(31,15): warning C4090:  'function': different 'const' qualifiers
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(56,32): warning C4090:  'function': different 'const' qualifiers
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(71,32): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(78,38): warning C4047:  'function': 'char' differs in levels of indirection from 'void *'
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(78,38): warning C4024:  'SubString': different types for formal and actual parameter 2
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(102,15): warning C4477:  'printf' : format string '%ld' requires an argument of type 'long', but variadic argument 2 has type 'size_t'
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(102,15): message :  consider using '%zd' in the format string
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(102,15): warning C4477:  'printf' : format string '%ld' requires an argument of type 'long', but variadic argument 3 has type 'size_t'
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(102,15): message :  consider using '%zd' in the format string
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(135,36): warning C4244:  '=': conversion from 'short' to 'char', possible loss of data
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(149,72): warning C4267:  'function': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(160,12): warning C4090:  'function': different 'const' qualifiers
+C:\Users\Aaron Gdanski\Desktop\RegChecker\RegChecker\regparse.c(59,1): warning C4090:  'initializing': different 'const' qualifiers
   RegChecker.vcxproj -> C:\Users\Aaron Gdanski\Desktop\RegChecker\x64\Debug\RegChecker.exe

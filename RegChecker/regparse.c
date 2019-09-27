@@ -26,7 +26,10 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 		}
 
 
-		LPCSTR line = getLineWchar(regFile);
+		LPCSTR line = getLineWchar(regFile); //is this on the stack?
+		LPCSTR line2 = (LPCSTR)malloc(sizeof(char) * strlen(line));
+		strcpy(line2, line);
+		line = line2;
 		if (line[0] == '[' && line[strlen(line) - 1] == ']')
 		{
 			char* path = (char*)malloc(sizeof(char) * (strlen(line) - (size_t) 1));
@@ -84,17 +87,33 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 						if (currValStringSize != sizeof(char) * strlen(valString)) //check if we arent on first iteration
 						{
 							char* nextLine = getLineWchar(regFile);
+							char* nextLine2 = (char*)malloc(sizeof(char) * strlen(nextLine));
+							strcpy(nextLine2, nextLine);
+							nextLine = nextLine2;
 							printf("nextLine %s\n", nextLine);
 							int index = 0;
-							while (isspace(index) && index < strlen(nextLine)) //should never hit second condition
+							while (isspace(nextLine[index]) && index < strlen(nextLine)) //should never hit second condition
 							{
 								index++;
 							}
 
 							char* toUse = (nextLine + index);
 
-							printf("currline - %s, currValSize - %d, strlen(toUse) - %d, index - %d\n", currLine, currValStringSize, strlen(toUse), index);
-							currLine = (char*)realloc(currLine, currValStringSize + (sizeof(char) * strlen(toUse)));
+							printf("currline - %s, currValSize - %ld, strlen(toUse) - %ld, index - %d\n", currLine, currValStringSize, strlen(toUse), index);
+							//currLine = (char*)realloc(currLine, currValStringSize + (sizeof(char) * strlen(toUse)));
+							printf("%s - touse\n", toUse);
+							//currLine = (char*)realloc(currLine, sizeof(char) * (strlen(toUse) + currValStringSize));
+							char* newPtr = (char*)realloc(currLine, sizeof(char) * (strlen(toUse) + currValStringSize));
+							if (newPtr != NULL)
+							{
+								currLine = newPtr;
+							}
+							else
+							{
+								//error
+								printf("realloc null\n");
+								return NULL;
+							}
 							printf("done realloc\n");
 							char* end = (currLine + strlen(currLine));
 							strcpy_s(end, sizeof(char) * strlen(toUse) + 1, toUse);
