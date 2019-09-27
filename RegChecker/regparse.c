@@ -58,10 +58,14 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 				if (restOfStr[0] == '\"')
 				{
 					//REG_SZ or REG_EXPAND_SZ
-					char* newPtr = SubString(restOfStr, '\"', '\"', NULL);
+					char* newPtr = SubString(restOfStr + 2, '\"', '\"', NULL);
 					//free(restOfStr);
-					restOfStr = newPtr;
-					valueLen = strlen(restOfStr);
+					char* fullStr = (char*)malloc(sizeof(char) * (strlen(newPtr) + 3));
+					strcpy_s(fullStr, sizeof(char) * (strlen(newPtr) + 3), "\"\\"); //seems they all have "\" on front
+					strcat_s(fullStr, sizeof(char) * (strlen(newPtr) + 3), newPtr);
+					restOfStr = fullStr;
+					free(newPtr);
+					valueLen = strlen(fullStr);
 
 				}
 				else
@@ -69,17 +73,18 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 					int typeEnd = 0;
 					free(type);
 					type = SubString(restOfStr, NULL, ':', &typeEnd);
-					char* valString = (restOfStr + typeEnd + 2); //should now be exactly on the value
+					char* valString = (restOfStr + typeEnd + 1); //should now be exactly on the value
 					char* currLine = valString;
 					size_t currValStringSize = sizeof(char) * strlen(valString);
 
-					while (currLine[strlen(currLine) - 1] == '\\')
+					while (currLine[strlen(currLine) - 1] == '\\') //currently debugging this section
 					{
 						//extended lines
 						currLine[strlen(currLine) - 1] = '\0'; //remove trailing backslash
 						if (currValStringSize != sizeof(char) * strlen(valString)) //check if we arent on first iteration
 						{
 							char* nextLine = getLineWchar(regFile);
+							printf("nextLine %s\n", nextLine);
 							int index = 0;
 							while (isspace(index) && index < strlen(nextLine)) //should never hit second condition
 							{
@@ -88,15 +93,18 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 
 							char* toUse = (nextLine + index);
 
-
+							printf("currline - %s, currValSize - %d, strlen(toUse) - %d, index - %d\n", currLine, currValStringSize, strlen(toUse), index);
 							currLine = (char*)realloc(currLine, currValStringSize + (sizeof(char) * strlen(toUse)));
+							printf("done realloc\n");
 							char* end = (currLine + strlen(currLine));
-							strcpy_s(end, sizeof(char) * (strlen(toUse) + 1), toUse);
+							strcpy_s(end, sizeof(char) * strlen(toUse) + 1, toUse);
 							free(nextLine);
 						}
 
 						//account for strings that are hex bytes, change this type of value to a byte array
 					}
+
+					printf("beforeexception: %s\n", type);
 					if (strncmp(type, "hex", 3) == 0) //account for hex strings
 					{
 						char* first = strtok(valString, ",");

@@ -18,7 +18,6 @@ int StrIndex(char* str, char ch)
 //this one should work, test it
 char* SubString(char* str, char startChar, char endChar, int* endIndex)
 {
-
 	int start = -1;
 	int end = -1;
 	for (int i = 0; i < strlen(str); i++)
