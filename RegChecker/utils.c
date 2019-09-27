@@ -37,7 +37,7 @@ char* SubString(char* str, char startChar, char endChar, int* endIndex)
 	}
 
 
-	if ((start == -1  && startChar != NULL) || (end == -1 && startChar == NULL))
+	if ((start == -1 && startChar != NULL) || (end == -1 && startChar == NULL))
 	{
 		return NULL; //not found
 	}
@@ -46,7 +46,7 @@ char* SubString(char* str, char startChar, char endChar, int* endIndex)
 	char* retValue = NULL;
 	if (startChar == NULL)
 	{
-		if (endChar != NULL) 
+		if (endChar != NULL)
 		{
 			retValue = (char*)malloc(sizeof(char) * ((size_t)end + (size_t)1));
 			strncpy_s(retValue, sizeof(char) * ((size_t)end + (size_t)1), str, end);
@@ -64,9 +64,10 @@ char* SubString(char* str, char startChar, char endChar, int* endIndex)
 	else
 	{
 		//both are not null, and found
-		int sizeInChars = end - start; //this should be about right
+		int sizeInChars = end - start - 1; //this should be about right
+		char* startingPoint = (str + start + 1);
 		retValue = (char*)malloc(sizeof(char) * ((size_t)sizeInChars + (size_t)1));
-		strncpy_s(retValue, ((size_t)sizeInChars + (size_t)1), sizeInChars);
+		strncpy_s(retValue, ((size_t)sizeInChars + (size_t)1), startingPoint, sizeInChars);
 	}
 
 	if (endIndex != NULL)
