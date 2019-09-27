@@ -1,2 +1,15 @@
-﻿  reglist.c
+﻿  regparse.c
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(53,32): warning C4090:  'function': different 'const' qualifiers
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(71,38): warning C4047:  'function': 'char' differs in levels of indirection from 'void *'
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(71,38): warning C4024:  'SubString': different types for formal and actual parameter 2
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(84,39): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(108,36): warning C4244:  '=': conversion from 'short' to 'char', possible loss of data
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(133,12): warning C4090:  'function': different 'const' qualifiers
+  utils.c
+C:\Users\Saint\Desktop\RegChecker\RegChecker\regparse.c(56,1): warning C4090:  'initializing': different 'const' qualifiers
+C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(22,23): warning C4047:  '==': 'int' differs in levels of indirection from 'void *'
+C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(26,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(28,62): warning C4047:  '!=': 'int' differs in levels of indirection from 'void *'
+  Generating Code...
+C:\Users\Saint\Desktop\RegChecker\RegChecker\utils.c(151,20): warning C4018:  '<': signed/unsigned mismatch
   RegChecker.vcxproj -> C:\Users\Saint\Desktop\RegChecker\Debug\RegChecker.exe

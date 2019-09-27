@@ -15,13 +15,79 @@ int StrIndex(char* str, char ch)
 	}
 }
 
+//this one should work, test it
 char* SubString(char* str, char startChar, char endChar, int* endIndex)
 {
+
 	int start = -1;
 	int end = -1;
 	for (int i = 0; i < strlen(str); i++)
 	{
 		if (start == -1 && str[i] == startChar)
+		{
+			start = i;
+		}
+		else
+		{
+			if (end == -1 && str[i] == endChar)
+			{
+				end = i;
+			}
+		}
+	}
+
+
+	if ((start == -1  && startChar != NULL) || (end == -1 && startChar == NULL))
+	{
+		return NULL; //not found
+	}
+
+
+	char* retValue = NULL;
+	if (startChar == NULL)
+	{
+		if (endChar != NULL) 
+		{
+			retValue = (char*)malloc(sizeof(char) * ((size_t)end + (size_t)1));
+			strncpy_s(retValue, sizeof(char) * ((size_t)end + (size_t)1), str, end);
+		}
+		else
+		{
+			return str; //just return the whole fucking string at this point, they dont want anything lmao
+		}
+	}
+	else if (endChar == NULL) //second case - endChar is null
+	{
+		retValue = (char*)malloc(sizeof(char) * ((size_t)strlen(str) - (size_t)start));
+		strcpy_s(retValue, sizeof(char) * ((size_t)strlen(str) - (size_t)start), (str + start));
+	}
+	else
+	{
+		//both are not null, and found
+		int sizeInChars = end - start; //this should be about right
+		retValue = (char*)malloc(sizeof(char) * ((size_t)sizeInChars + (size_t)1));
+		strncpy_s(retValue, ((size_t)sizeInChars + (size_t)1), sizeInChars);
+	}
+
+	if (endIndex != NULL)
+	{
+		*endIndex = end;
+	}
+
+	return retValue;
+}
+
+/*char* SubString(char* str, char startChar, char endChar, int* endIndex)
+{
+	int start = -1;
+	int end = -1;
+	if (startChar == NULL)
+	{
+		start = 0;
+	}
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (start == -1 && str[i] == startChar && startChar != NULL)
 		{
 			start = i;
 		}
@@ -41,14 +107,20 @@ char* SubString(char* str, char startChar, char endChar, int* endIndex)
 
 	char* ret = (char*)malloc(sizeof(char) * ((end - start) + 1)); //fix this
 	ret[end - start] = '\0';
-	strcpy_s(ret, sizeof(char) * (end - start), (str + start)); //buffer too small
+	//strcpy_s(ret, sizeof(char) * (end - start), (str + start)); //buffer too small
+	if (start != 0)
+	{
+		start++; //kinda a bs fix, honestly going to rewrite this entire function
+	}
+	strncpy_s(ret, (end - start), (str + start), (size_t)(end - start - 1));
 	if (endIndex != NULL)
 	{
 		int index = start + (end - start);
 		*endIndex = index;
 	}
+	printf("Returning %s\n", ret);
 	return ret;
-}
+}*/
 
 
 //seems to be an issue with this function here.
@@ -61,16 +133,6 @@ char * getLine(FILE* stream) {
 		printf("NULL PTR - GETLINE\n");
 		return NULL;
 	}
-
-	/*while ((c = fgetc(stream)) != EOF && c != 10) {
-		printf("HIIIII\n");
-		str[index] = (char)c;
-		str = (char*)realloc(str, sizeof(char) * (index + 2));
-		index++;
-	}*/
-
-	//str[index] = '\0';
-	//printf("returning %d\n", strlen(str));
 
 	while (!feof(stream))
 	{

@@ -5,10 +5,7 @@
 reg_file_t* ParseRegistryFile(LPCSTR filePath)
 {
 	//need to get registry path
-	system("echo %cd%");
-	printf("parse\n");
 	reg_file_t* regFileT = CreateRegFileStruct();
-	printf("1\n");
 	//FILE* regFile = fopen(filePath, "r");
 	//fseek(regFile, 0L, SEEK_SET); //doubt this will fix file issue but why not
 	FILE * regFile = OpenWcharFile(filePath);
@@ -17,34 +14,25 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 		printf("RegFile is null\n");
 		return NULL;
 	}
-	printf("2\n");
+
 	char* currentPath = NULL;
 	reg_list_t* currentList = NULL;
 	bool extendedLine = false;
-	printf("3\n");
 	while (true)
 	{
-		printf("4\n");
 		if (feof(regFile))
 		{
-			printf("5\n");
 			break;
 		}
 
-		printf("6\n");
 
 		LPCSTR line = getLineWchar(regFile);
-		printf("7\n");
-		printf("line - %s\n", line);
 		if (line[0] == '[' && line[strlen(line) - 1] == ']')
 		{
-			printf("8\n");
 			char* path = (char*)malloc(sizeof(char) * (strlen(line) - (size_t) 1));
 			size_t amtToCpy = sizeof(char) * ((size_t)strlen(line) - (size_t) 2);
-			printf("test- %ld, %d\n", amtToCpy, strlen((line + 1)));
 			//strncpy_s(path, amtToCpy, (line + 1));
 			strncpy_s(path, strlen(line) - (size_t) 1, line + 1, amtToCpy);
-			printf("path %s\n", path);
 			path[strlen(line) - 2] = '\0'; //ensure null terminator
 			currentPath = path;
 			if (currentList != NULL)
@@ -52,11 +40,9 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 				AddRegPathToFile(regFileT, currentList);
 			}
 			currentList = CreateRegList(path);
-			printf("9\n");
 		}
 		else
 		{
-			printf("10\n");
 			if (currentPath == NULL)
 			{
 				goto cleanup;
@@ -67,14 +53,14 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 				char* name = SubString(line, '\"', '\"', &nameEnd); //key 
 				char* type = (char*)malloc(sizeof(char) * 7); //REG_SZ by default
 				strcpy_s(type, sizeof(char) * 7, "REG_SZ");
-				char* restOfStr = (name + nameEnd + 2); //next char should be an equals
+				char* restOfStr = (line + nameEnd + 2); //next char should be an equals
 				int valueLen = 0;
 				if (restOfStr[0] == '\"')
 				{
 					//REG_SZ or REG_EXPAND_SZ
-					char* oldPtr = restOfStr;
-					restOfStr = SubString(restOfStr, '\"', '\"', NULL);
-					free(oldPtr);
+					char* newPtr = SubString(restOfStr, '\"', '\"', NULL);
+					//free(restOfStr);
+					restOfStr = newPtr;
 					valueLen = strlen(restOfStr);
 
 				}
@@ -82,7 +68,7 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 				{
 					int typeEnd = 0;
 					free(type);
-					type = SubString(restOfStr, restOfStr[0], ':', &typeEnd);
+					type = SubString(restOfStr, NULL, ':', &typeEnd);
 					char* valString = (restOfStr + typeEnd + 2); //should now be exactly on the value
 					char* currLine = valString;
 					size_t currValStringSize = sizeof(char) * strlen(valString);
@@ -111,7 +97,6 @@ reg_file_t* ParseRegistryFile(LPCSTR filePath)
 
 						//account for strings that are hex bytes, change this type of value to a byte array
 					}
-
 					if (strncmp(type, "hex", 3) == 0) //account for hex strings
 					{
 						char* first = strtok(valString, ",");
