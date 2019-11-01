@@ -159,7 +159,9 @@ void printKeyValues(HKEY hKey) //eventually try and cut some stack space off thi
 
 int main()
 {
+	printf("Test Reg Main\n");
 	reg_file_t* regFile = ParseRegistryFile("testregexport.reg");
+	printf("Parsed Reg File\n");
 	if (regFile == NULL)
 	{
 		printf("regfile is null\n");

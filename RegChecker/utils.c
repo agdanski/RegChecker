@@ -157,11 +157,16 @@ char * getLine(FILE* stream) {
 	return str;
 }
 
+
+/*
 char* getLineWchar(FILE* stream) 
 {
-	setlocale(LC_ALL, "en_US.UTF-16");
+	printf("wchar-1\n");
+	//setlocale(LC_ALL, "en_US.UTF-16");
+	printf("wchar-1.1\n");
 	wint_t c = -1;
-	int index = 0;
+	size_t index = 0;
+	printf("wchar-2\n");
 	wchar_t* str = (wchar_t*)malloc(sizeof(wchar_t));
 	if (str == 0)
 	{
@@ -169,14 +174,20 @@ char* getLineWchar(FILE* stream)
 		return NULL;
 	}
 
+	printf("wchar-3\n");
+
+
 	while (!feof(stream))
 	{
+		printf("wchar-4\n");
 		wchar_t* line = NULL;
 		c = fgetwc(stream);
-		if (c == WEOF) // newline is different w this file, use CRLF
+		if (c == L'\r' && fgetwc(stream) == L'\n') // newline is different w this file, use CRLF
 		{
 			break;
 		}
+
+		printf("wchar-5\n");
 
 		//newline fix
 		if (c == 0xD)
@@ -192,14 +203,22 @@ char* getLineWchar(FILE* stream)
 				fseek(stream, -2L, SEEK_CUR);
 			}
 		}
+
+		printf("wchar-6\n");
 		str[index] = (wchar_t)c;
 		index++;
-		str = (wchar_t*)realloc(str, sizeof(wchar_t) * (index + 1));
-		if (str == 0)
+		size_t newSz = index;
+		newSz++;
+		printf("newsz %lld\n", newSz);
+		printf("wstrlen %lld\n", wcslen(str));
+		wchar_t* newPtr = (wchar_t*)realloc(str, sizeof(wchar_t) * newSz);
+		if (newPtr == 0)
 		{
-			printf("STR NULL\n");
 			return NULL;
 		}
+		str = newPtr;
+
+		printf("wchar-7\n");
 	}
 	str[index] = L'\0';
 	char* asciiStr = (char*)malloc(sizeof(char) * (wcslen(str) + 1));
@@ -209,6 +228,114 @@ char* getLineWchar(FILE* stream)
 	size_t result = wcstombs(asciiStr, str, size);
 	setlocale(LC_ALL, "en_US");
 	return asciiStr;
+}*/
+
+char* getLineWchar(FILE* stream)
+{
+
+	size_t index = 0;
+	wchar_t * wstr = (wchar_t*) malloc(sizeof(wchar_t));
+	setlocale(LC_ALL, "en_US.UTF-16");
+	//get size of stream for feof check - without feof
+	size_t currPos = ftell(stream);
+	fseek(stream, 0L, SEEK_END);
+	size_t end = ftell(stream);
+	fseek(stream, currPos, SEEK_SET);
+	bool isEnd = false;
+	if (wstr == 0)
+	{
+		return NULL; //error
+	}
+	memset(wstr, 0x0, sizeof(wchar_t));
+	while (true)
+	{
+		
+
+		
+		if (ftell(stream) == end)
+		{
+			isEnd = true;
+			break;
+		}
+		wint_t wchar = fgetwc(stream);
+		if (wchar == L'\r')
+		{
+			if (fgetwc(stream) == L'\n')
+			{
+				break;
+			}
+			else
+			{
+				fseek(stream, -1 * (sizeof(wchar_t)), SEEK_CUR);
+			}
+		}
+
+		wstr[index] = (wchar_t) wchar;
+		//swap the memory addrs here
+		index++;
+		
+		wchar_t* newPtr = (wchar_t*)realloc(wstr, sizeof(wchar_t) * (size_t)(index + 1));
+		
+		if (newPtr == 0)
+		{
+			return NULL; //error
+		}
+		memset(newPtr + index + 1, 0x0, sizeof(wchar_t));
+
+		wstr = newPtr;
+	}
+
+	if (wstr == 0)
+	{
+		return NULL;
+	}
+	wstr[index] = L'\0';
+	if (wcslen(wstr) == 0)
+	{
+		if (isEnd)
+		{
+			return NULL;
+		}
+		char* ret = (char*)malloc(sizeof(char));
+		if (ret == 0)
+		{
+			return NULL;
+		}
+		memset(ret, 0x0, sizeof(char));
+		return ret;
+	}
+	size_t wcsSize = wcslen(wstr);
+	wcsSize++;
+	char* asciiArr = (char*)malloc(sizeof(char) * wcsSize);
+	
+	if (asciiArr == 0)
+	{
+		return NULL;
+	}
+	memset(asciiArr, 0x0, wcsSize);
+	//size_t result = wcstombs(asciiArr, wstr, wcsSize);
+	int result = WideCharToMultiByte(
+		CP_UTF8,
+		0, //might wanna change
+		wstr,
+		-1,
+		asciiArr,
+		wcsSize  * sizeof(char),
+		NULL,
+		NULL
+	);
+	asciiArr[index] = '\0'; //seems to be a kinda bullshit fix - 
+	if (result == 0)
+	{
+		printf("error w wcstombs %x\n", GetLastError());
+	}
+	if ((size_t)result != wcsSize)
+	{
+		printf("Possible error - diff sizes %d %lld\n", result, wcsSize);
+	}
+	setlocale(LC_ALL, "en_US");
+	return asciiArr;
+
 }
 
 int getAmountOfCharsNot(char* str, char ch)
