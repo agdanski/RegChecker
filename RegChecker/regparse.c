@@ -1,4 +1,6 @@
 #include "regparse.h"
+
+static char* ParseMultiLines(FILE* stream);
 /*
 //parse .reg files (going to likely be in whichever program i put the files in, but this is the general idea.
 //highly likely going to have to rewrite this in java unless I somehow send the files over or something
@@ -224,4 +226,58 @@ reg_file_t* ParseRegistryFile(char* filePath)
 	}
 
 	return NULL;
+}
+
+//felt its easier to split this from the rest - once we get a multi line, throw it in here
+static char* ParseMultiLines(FILE* stream)
+{
+	char* line = NULL;
+	char* retVal = NULL;
+	while ((line = getLineWchar(stream)) != NULL)
+	{
+		if (strlen(line) == 0)
+		{
+			break;
+		}
+
+		if (line[strlen(line) - 1] != '\\')
+		{
+			break;
+		}
+
+		char* newBuff = (char*)malloc(sizeof(char) * strlen(line));
+		memset(newBuff, 0x0, strlen(line));
+		strncpy_s(newBuff, strlen(line), line, strlen(line) - 1);
+		free(line); //we dont really need line anymore
+		if (retVal == NULL)
+		{
+			if (newBuff != NULL)
+			{
+				retVal = newBuff;
+			}
+			else
+			{
+				return NULL;
+			}
+		}
+		else
+		{
+			size_t currSize = strlen(retVal);
+			char* newPtr = (char*)realloc(retVal, currSize + strlen(newBuff) + 1);
+			if (newPtr != NULL)
+			{
+				retVal = newPtr;
+			}
+			else
+			{
+				return NULL;
+			}
+
+			strcat_s(retVal, currSize + strlen(newBuff) + 1, newBuff);
+			free(newBuff);
+		}
+
+	}
+
+	return retVal;
 }
