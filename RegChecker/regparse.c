@@ -217,13 +217,41 @@ reg_file_t* ParseRegistryFile(char* filePath)
 	getLineWchar(regFile);
 	getLineWchar(regFile);
 	//first two lines are useless, lets just pass them
+	char* currentKey = NULL;
 	char* line = NULL;
+	reg_list_t* regList = NULL;
 	while ((line = getLineWchar(regFile)) != NULL)
 	{
-		printf("LINE: %s\n", line);
-		printf("Strlen: %lld\n", strlen(line));
+		if (strlen(line) != 0)
+		{
+			if (line[0] == '[' && line[strlen(line) - 1] == ']')
+			{
+				//this is a key line - parse as such
+				char* keyPath = malloc(sizeof(char) * (strlen(line) - 1));
+				if (keyPath == NULL)
+				{
+					return NULL;
+				}
+				memset(keyPath, 0x0, strlen(line) - 1);
+				strncpy_s(keyPath, strlen(line) - 1, line + 1, strlen(line) - 1);
+				if (currentKey != NULL)
+				{
+					AddRegPathToFile(regFileStruct, regList);
+					free(currentKey);
+					currentKey = keyPath;
+				}
+
+				regList = CreateRegList(currentKey);
+			}
+			else
+			{
+				//parse the actual values and stuff here
+			}
+		}
 		free(line);
 	}
+
+	fclose(regFile);
 
 	return NULL;
 }

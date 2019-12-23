@@ -266,7 +266,7 @@ char* getLineWchar(FILE* stream)
 			}
 			else
 			{
-				fseek(stream, -1 * (sizeof(wchar_t)), SEEK_CUR);
+				fseek(stream, -2, SEEK_CUR); //sizeof(wchar_t) * -1 == -2
 			}
 		}
 
